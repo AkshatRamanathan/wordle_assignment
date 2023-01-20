@@ -82,11 +82,11 @@ function checkGuess() {
   }
 
   //check yellow
-  //checking guess letters
+  //check guess letters
   for (let i = 0; i < 5; i++) {
     if (letterColor[i] == "green") continue;
 
-    //checking right letters
+    //check right letters
     for (let j = 0; j < 5; j++) {
       if (rightGuess[j] == currentGuess[i]) {
         letterColor[i] = "yellow";
@@ -99,9 +99,9 @@ function checkGuess() {
     let box = row.children[i];
     let delay = 250 * i;
     setTimeout(() => {
-      //flip box
+      //flip
       animateCSS(box, "flipInX");
-      //shade box
+      //shade
       box.style.backgroundColor = letterColor[i];
       shadeKeyBoard(guessString.charAt(i) + "", letterColor[i]);
     }, delay);
@@ -139,16 +139,11 @@ function insertLetter(pressedKey) {
 }
 
 const animateCSS = (element, animation, prefix = "animate__") =>
-  // We create a Promise and return it
   new Promise((resolve, reject) => {
     const animationName = `${prefix}${animation}`;
-    // const node = document.querySelector(element);
     const node = element;
     node.style.setProperty("--animate-duration", "0.3s");
-
     node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
     function handleAnimationEnd(event) {
       event.stopPropagation();
       node.classList.remove(`${prefix}animated`, animationName);
@@ -192,6 +187,14 @@ document.getElementById("keyboard-cont").addEventListener("click", (e) => {
 
   if (key === "Del") {
     key = "Backspace";
+  }
+
+  if (key === "Restart") {
+    location.reload();
+
+  }
+  if (key === "Check") {
+    checkGuess();
   }
 
   document.dispatchEvent(new KeyboardEvent("keyup", { key: key }));

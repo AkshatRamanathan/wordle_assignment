@@ -1,8 +1,8 @@
 export const WORDS = [
-  'which',
+  'where',
   'there',
   'their',
-  'about',
-  'would',
-  'pupal'
+  'alive',
+  'beast',
+  'traps'
 ]
