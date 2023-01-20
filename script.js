@@ -6,8 +6,6 @@ let currentGuess = [];
 let nextLetter = 0;
 let correctGuess = WORDS[Math.floor(Math.random() * WORDS.length)];
 
-console.log(correctGuess);
-
 function init() {
   let board = document.getElementById("game-board");
 
