@@ -4,9 +4,21 @@ const GUESS_COUNT = 6;
 let pendingGuess = GUESS_COUNT;
 let currentGuess = [];
 let nextLetter = 0;
-let correctGuess = WORDS[Math.floor(Math.random() * WORDS.length)];
+let correctGuess;
+//  = WORDS[Math.floor(Math.random() * WORDS.length)];
 
 function init() {
+  if (localStorage.getItem("HighScore") == null) {
+    localStorage.setItem("HighScore", 0);
+  }
+
+  fetch("http://localhost/getWord").then((response) => {
+    return response.text();
+  }).then((body) => {
+    correctGuess = body;
+    console.log("at front:", body);
+  })
+
   let board = document.getElementById("game-board");
 
   for (let i = 0; i < GUESS_COUNT; i++) {
@@ -53,7 +65,7 @@ function deleteLetter() {
 function checkGuess() {
   let row = document.getElementsByClassName("letter-row")[6 - pendingGuess];
   let guessString = "";
-  let rightGuess = Array.from(correctGuess);
+  let rightGuess = (correctGuess) ? Array.from(correctGuess) : null;
 
   for (const val of currentGuess) {
     guessString += val;
@@ -61,11 +73,6 @@ function checkGuess() {
 
   if (guessString.length != 5) {
     toastr.error("Not enough letters!");
-    return;
-  }
-
-  if (!WORDS.includes(guessString)) {
-    toastr.error("Word not in list!");
     return;
   }
 
@@ -107,6 +114,11 @@ function checkGuess() {
 
   if (guessString === correctGuess) {
     toastr.success("You guessed right! Game over!");
+    toastr.info(`Your Score was: "${pendingGuess}"`);
+    if (localStorage.getItem("HighScore") < pendingGuess) {
+      localStorage.setItem("HighScore", pendingGuess);
+      toastr.info(`Your High Score was saved`);
+    }
     pendingGuess = 0;
     return;
   } else {
@@ -114,9 +126,12 @@ function checkGuess() {
     currentGuess = [];
     nextLetter = 0;
 
+    //use pendingGuess and do saving highscore logic
     if (pendingGuess === 0) {
       toastr.error("You've run out of guesses! Game over!");
       toastr.info(`The right word was: "${correctGuess}"`);
+      toastr.info(`Your Score was: "${pendingGuess}"`);
+      
     }
   }
 }

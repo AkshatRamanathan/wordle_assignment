@@ -1,4 +1,5 @@
-export const WORDS = [
+export const WORDS = 
+[
   'where',
   'there',
   'their',
